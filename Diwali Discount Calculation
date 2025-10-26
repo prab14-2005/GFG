@@ -1,0 +1,99 @@
+"Diwali Discount Calculation"
+
+import time
+
+# ANSI Color Codes for better console output
+RED = '\033[91m'
+GREEN = '\033[92m'
+YELLOW = '\033[93m'
+CYAN = '\033[96m'
+MAGENTA = '\033[95m'
+RESET = '\033[0m'
+
+def apply_discount(total):
+    """Calculate discount based on total bill."""
+    if total > 2000:
+        return 0.25, "Mega Offer 🎁 (25%)"
+    elif total > 1000:
+        return 0.15, "Festival Offer 🪔 (15%)"
+    elif total > 500:
+        return 0.10, "Diwali Offer ✨ (10%)"
+    else:
+        return 0.00, "No Discount 😅"
+
+def add_cashback(final_total):
+    """Add cashback coupons based on total spent."""
+    if final_total > 2000:
+        cashback = 200
+    elif final_total > 1000:
+        cashback = 100
+    elif final_total > 500:
+        cashback = 50
+    else:
+        cashback = 0
+    return cashback
+
+def print_bill_summary(prices, total, discount, final_total, rate, offer_text, cashback):
+    """Neatly formatted bill output with colors."""
+
+    print("\n" + MAGENTA + "=" * 60)
+    print(f"💸  DIWALI DISCOUNT CALCULATOR  💸".center(60))
+    print("=" * 60 + RESET)
+
+    print(YELLOW + "\n🛍️  ITEMIZED BILL:" + RESET)
+    print("─" * 60)
+    for i, price in enumerate(prices, start=1):
+        print(f"Item {i:<2}: ₹{price:>7.2f}")
+    print("─" * 60)
+    print(f"{CYAN}Total Before Discount : ₹{total:.2f}{RESET}")
+    print(f"{YELLOW}Applied Offer          : {offer_text}{RESET}")
+    print(f"{GREEN}Discount Amount        : ₹{discount:.2f} ({rate*100:.0f}% OFF){RESET}")
+    print(f"{MAGENTA}Final Payable Amount   : ₹{final_total:.2f}{RESET}")
+
+    if cashback > 0:
+        print(f"{CYAN}💰 Cashback Bonus       : ₹{cashback:.2f} (Next Purchase Credit){RESET}")
+    else:
+        print(f"{RED}No cashback this time! Buy more next time 😉{RESET}")
+
+    print("─" * 60)
+    total_savings = discount + cashback
+    print(f"{GREEN}🎉 Total Savings this Diwali  : ₹{total_savings:.2f}{RESET}")
+    print(MAGENTA + "=" * 60)
+    print(f"✨ THANK YOU! HAPPY DIWALI! ✨".center(60))
+    print("=" * 60 + RESET)
+
+
+def main():
+    print(CYAN + "=" * 70)
+    print("🪔  DIWALI FESTIVE DISCOUNT BILLING SYSTEM  🪔".center(70))
+    print("=" * 70 + RESET)
+
+    # Input with validation
+    while True:
+        try:
+            prices = list(map(float, input("\nEnter item prices separated by space: ").split()))
+            if not prices:
+                print(RED + "⚠️  Please enter at least one price!" + RESET)
+                continue
+            if any(p <= 0 for p in prices):
+                print(RED + "⚠️  Prices must be positive numbers!" + RESET)
+                continue
+            break
+        except ValueError:
+            print(RED + "❌ Invalid input! Please enter numbers only." + RESET)
+
+    # Optional: sort items for clarity
+    prices.sort(reverse=True)
+
+    total = sum(prices)
+    rate, offer_text = apply_discount(total)
+    discount = total * rate
+    final_total = total - discount
+    cashback = add_cashback(final_total)
+
+    time.sleep(0.5)
+    print_bill_summary(prices, total, discount, final_total, rate, offer_text, cashback)
+
+
+if __name__ == "__main__":
+    main()
