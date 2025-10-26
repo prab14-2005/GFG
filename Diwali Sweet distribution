@@ -1,0 +1,199 @@
+
+import math
+import statistics
+
+def basic_distribution(total_sweets, num_friends):
+    """Basic equal distribution."""
+    sweets_per_friend = total_sweets // num_friends
+    remaining = total_sweets % num_friends
+
+    print("\n🪔 BASIC DISTRIBUTION 🪔")
+    print("─" * 55)
+    print(f"Total Sweets       : {total_sweets}")
+    print(f"Number of Friends  : {num_friends}")
+    print(f"Each Friend Gets   : {sweets_per_friend} sweets")
+    print(f"Remaining Sweets   : {remaining}")
+    print("─" * 55)
+    return sweets_per_friend, remaining
+
+
+def fair_distribution(total_sweets, num_friends):
+    """Fair distribution by giving +1 sweet to early friends if remainder exists."""
+    base_sweets = total_sweets // num_friends
+    remaining = total_sweets % num_friends
+    distribution = []
+
+    print("\n🎁 FAIR DISTRIBUTION 🎁 (Handling Remainder Smartly)")
+    print("─" * 55)
+
+    for i in range(num_friends):
+        if i < remaining:
+            sweets = base_sweets + 1
+        else:
+            sweets = base_sweets
+        distribution.append(sweets)
+        print(f"Friend {i+1}: {sweets} sweets")
+
+    print("─" * 55)
+    print(f"Total Distributed : {sum(distribution)}")
+    print(f"Remaining         : 0 (Fully distributed)")
+    return distribution
+
+
+def percentage_distribution(total_sweets, num_friends):
+    """Displays percentage share and leftovers."""
+    sweets_per_friend = total_sweets // num_friends
+    remaining = total_sweets % num_friends
+    percent_share = (sweets_per_friend / total_sweets) * 100
+
+    print("\n📊 PERCENTAGE DISTRIBUTION 📊")
+    print("─" * 55)
+    print(f"Each Friend Gets : {percent_share:.2f}% of total sweets")
+    print(f"Sweets per Friend: {sweets_per_friend} / {total_sweets}")
+    print(f"Remaining Sweets : {remaining} ({(remaining/total_sweets)*100:.2f}%)")
+    print("─" * 55)
+
+
+def custom_distribution(total_sweets, num_friends):
+    """Priority-based weighted distribution system."""
+    print("\n🌟 CUSTOM WEIGHTED DISTRIBUTION 🌟")
+    print("─" * 55)
+    print("Assign priority for each friend (1 = Low, 2 = Medium, 3 = High):")
+
+    priorities = []
+    for i in range(num_friends):
+        while True:
+            try:
+                priority = int(input(f"Friend {i+1} priority (1-3): "))
+                if 1 <= priority <= 3:
+                    priorities.append(priority)
+                    break
+                else:
+                    print("⚠️  Please enter only 1, 2, or 3.")
+            except ValueError:
+                print("❌ Invalid input. Please enter a number.")
+
+    total_priority = sum(priorities)
+    distributed = []
+
+    print("\n🎯 Distribution Results:")
+    print("─" * 55)
+    for i, p in enumerate(priorities):
+        share = round((p / total_priority) * total_sweets)
+        distributed.append(share)
+        print(f"Friend {i+1} (Priority {p}): {share} sweets")
+
+    remainder = total_sweets - sum(distributed)
+    print("─" * 55)
+    print(f"Total Distributed: {sum(distributed)}")
+    print(f"Remaining        : {remainder}")
+    return distributed
+
+
+def statistics_report(total_sweets, num_friends):
+    """Generates a summarized statistical overview."""
+    sweets_per_friend = total_sweets // num_friends
+    remaining = total_sweets % num_friends
+    average = total_sweets / num_friends
+    efficiency = ((total_sweets - remaining) / total_sweets) * 100
+
+    print("\n📈 STATISTICAL REPORT 📈")
+    print("=" * 55)
+    print(f"Total Sweets         : {total_sweets}")
+    print(f"Number of Friends    : {num_friends}")
+    print(f"Average per Friend   : {average:.2f}")
+    print(f"Median Distribution  : {sweets_per_friend}")
+    print(f"Distribution Efficiency : {efficiency:.2f}%")
+    print(f"Remaining (Unused)   : {remaining} sweets")
+    print(f"Waste Percentage     : {(remaining/total_sweets)*100:.2f}%")
+    print("=" * 55)
+
+
+def sweet_visualization(total, friends):
+    """Optional visual display."""
+    print("\n🎨 SWEET VISUALIZATION 🍬")
+    print("─" * 55)
+    sweets = "🍬 " * min(20, total // friends)
+    for i in range(friends):
+        print(f"Friend {i+1}: {sweets} ({total // friends} sweets)")
+
+
+def main():
+    """Main menu system for distribution modes."""
+    print("=" * 70)
+    print("✨ DIWALI SWEET DISTRIBUTION SYSTEM ✨".center(70))
+    print("=" * 70)
+
+    # Input Validation
+    while True:
+        try:
+            total_sweets = int(input("\nEnter total number of sweets: "))
+            if total_sweets > 0:
+                break
+            else:
+                print("⚠️  Please enter a positive number!")
+        except ValueError:
+            print("❌ Invalid input! Enter a valid number.")
+
+    while True:
+        try:
+            num_friends = int(input("Enter number of friends: "))
+            if num_friends > 0:
+                break
+            else:
+                print("⚠️  Please enter a positive number!")
+        except ValueError:
+            print("❌ Invalid input! Enter a valid number.")
+
+    # Menu system
+    print("\n" + "─" * 70)
+    print("🎯 Choose Distribution Method:")
+    print("─" * 70)
+    print("1. Basic Distribution (Equal)")
+    print("2. Fair Distribution (+1 remainder handling)")
+    print("3. Percentage View")
+    print("4. Custom Weighted Distribution")
+    print("5. Statistical Report")
+    print("6. Show All (Full Analysis)")
+    print("7. Sweet Visualization 🍬")
+    print("─" * 70)
+
+    while True:
+        try:
+            choice = int(input("Enter your choice (1-7): "))
+            if 1 <= choice <= 7:
+                break
+            else:
+                print("⚠️  Choose between 1-7!")
+        except ValueError:
+            print("❌ Invalid choice!")
+
+    print("\n" + "=" * 70)
+
+    # Execution
+    if choice == 1:
+        basic_distribution(total_sweets, num_friends)
+    elif choice == 2:
+        fair_distribution(total_sweets, num_friends)
+    elif choice == 3:
+        percentage_distribution(total_sweets, num_friends)
+    elif choice == 4:
+        custom_distribution(total_sweets, num_friends)
+    elif choice == 5:
+        statistics_report(total_sweets, num_friends)
+    elif choice == 6:
+        basic_distribution(total_sweets, num_friends)
+        fair_distribution(total_sweets, num_friends)
+        percentage_distribution(total_sweets, num_friends)
+        custom_distribution(total_sweets, num_friends)
+        statistics_report(total_sweets, num_friends)
+    elif choice == 7:
+        sweet_visualization(total_sweets, num_friends)
+
+    print("\n" + "=" * 70)
+    print("💖 Happy Diwali!".center(70))
+    print("=" * 70)
+
+
+if __name__ == "__main__":
+    main()
